@@ -1,5 +1,3 @@
-.PHONY: test start up
-
 test:
 	vagrant -v
 	test -e Vagrantfile || exit
@@ -8,12 +6,12 @@ install:
 	npm install
 
 start:
-	npm start
+	caddy reload && npm start
 
 vagrant-install:
 	vagrant ssh -c "cd /vagrant && make install"
 
-vagrant-start: up
+vagrant-start:
 	vagrant ssh -c "cd /vagrant && make start"
 
 up:
