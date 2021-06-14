@@ -1,3 +1,5 @@
+.PHONY: test start up
+
 test:
 	vagrant -v
 	test -e Vagrantfile || exit

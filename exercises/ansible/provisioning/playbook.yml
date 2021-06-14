@@ -1,0 +1,39 @@
+---
+
+- hosts: all
+  tasks:
+    - block:
+      - name: generate locale
+        locale_gen:
+          name: en_US.UTF-8
+          state: present
+        tags: [locale]
+
+      - name: set locale
+        become: yes
+        shell: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
+        tags: [locale]
+
+      - name: set NodeJS
+        shell: curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+      - name: install NodeJS
+        become: true
+        become_method: sudo
+        apt:
+          name: nodejs
+          state: present
+
+      - name: install make
+        become: true
+        become_method: sudo
+        apt:
+          name: make
+          state: present
+
+      - name: set dev-address
+        become: true
+        become_method: sudo
+        lineinfile:
+          path: /etc/environment
+          line: FASTIFY_ADDRESS=0.0.0.0
