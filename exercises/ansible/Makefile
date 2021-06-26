@@ -8,7 +8,7 @@ install:
 	npm install
 
 start:
-	caddy reload && npm start
+	npm start
 
 vagrant-install:
 	vagrant ssh -c "cd /vagrant && make install"

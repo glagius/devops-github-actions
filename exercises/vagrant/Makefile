@@ -8,12 +8,12 @@ install:
 	npm install
 
 start:
-	npm start
+	FASTIFY_ADDRESS=0.0.0.0 npm start
 
 vagrant-install:
 	vagrant ssh -c "cd /vagrant && make install"
 
-vagrant-start: up
+vagrant-start:
 	vagrant ssh -c "cd /vagrant && make start"
 
 up:
