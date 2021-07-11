@@ -1,49 +1,99 @@
 ---
 
 - hosts: all
+  become: yes
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   tasks:
+  # Install utils
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+
+    - name: Install make
+      apt:
+        name: make
+        state: present
+
+    - name: Install inotify-tools
+      apt:
+        name: inotify-tools
+        state: present
+
+    - name: Install net-tools
+      apt:
+        name: net-tools
+        state: present
+
+# SETUP NODEJS
     - name: Install the gpg key for nodejs LTS
-      become: true
-      become_method: sudo
       apt_key:
         url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
         state: present
 
     - name: Add NodeJS deb repository
-      become: true
-      become_method: sudo
       apt_repository:
-        repo: deb https://deb.nodesource.com/node_16.x focal main
+        repo: deb https://deb.nodesource.com/node_14.x focal main
         filename: nodesource
         update_cache: true
 
     - name: Add NodeJS deb-src repository
-      become: true
-      become_method: sudo
       apt_repository:
-        repo: deb-src https://deb.nodesource.com/node_16.x focal main
+        repo: deb-src https://deb.nodesource.com/node_14.x focal main
         filename: nodesource
         update_cache: true
 
     - name: Install NodeJS
-      become: true
-      become_method: sudo
       apt:
         name: nodejs
         state: present
 
-    - name: Install make
-      become: true
-      become_method: sudo
-      apt:
-        name: make
+# SETUP ERLANG
+    - name: Add Erlang signing key
+      apt_key:
+        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
         state: present
 
-    - name: set dev-address
+    - name: Add Erlang deb repository
+      apt_repository:
+        repo: deb https://packages.erlang-solutions.com/ubuntu focal contrib
+        filename: erlangsource
+        update_cache: true
+
+    - name: Install Erlang
+      apt:
+        name: erlang
+        state: present
+
+    - name: Install Elixir
+      apt:
+        name: elixir
+        state: present
+
+    - name: Install Hex
       become: true
-      become_method: sudo
-      lineinfile:
-        path: /etc/environment
-        regexp: '^FASTIFY_ADDRESS='
-        insertafter: '^FASTIFY_ADDRESS='
-        line: FASTIFY_ADDRESS=0.0.0.0
+      command: mix local.hex --if-missing --force
+
+    - name: Install Rebar
+      become: true
+      command: mix local.rebar --if-missing --force
+
+    - name: Install Phoenix
+      command: mix archive.install hex phx_new --force
+
+# SETUP DATABASE:
+    - name: Add PostgreSQL signing key
+      apt_key:
+        url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+        state: present
+
+    - name: Add PostgreSQL deb repository
+      apt_repository:
+        repo: deb http://apt.postgresql.org/pub/repos/apt focal-pgdg main
+        filename: postgres
+        update_cache: true
+
+    - name: Install PostgreSQL
+      apt:
+        name: postgresql
+        state: present
