@@ -25,6 +25,31 @@
         name: net-tools
         state: present
 
+    - name: Install base dependencies
+      apt:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - locales
+          - build-essential
+          - acl
+          - ntp
+          - htop
+          - git
+          - python-pip
+          - python3-pip
+          - libpq-dev
+        state: present
+      tags:
+        - packages
+
+    - name: Upgrade pip
+      pip:
+        name: pip
+        state: latest
+      tags:
+        - packages
+
 # SETUP NODEJS
     - name: Install the gpg key for nodejs LTS
       apt_key:
@@ -69,10 +94,6 @@
       apt:
         name: elixir
         state: present
-
-    - name: Install Hex
-      become: true
-      command: mix local.hex --if-missing --force
 
     - name: Install Rebar
       become: true

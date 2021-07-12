@@ -5,8 +5,11 @@ test:
 up:
 	vagrant up
 
+setup-deps:
+	vagrant ssh -c "cd /vagrant/hello && mix local.hex --force"
+
 install:
-	vagrant ssh -c "cd /vagrant/hello && mix deps.get"
+	vagrant ssh -c "cd /vagrant/hello && mix deps.get --force"
 
 start:
 	vagrant ssh -c "cd /vagrant/hello && mix phx.server"
