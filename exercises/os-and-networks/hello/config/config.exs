@@ -12,7 +12,7 @@ config :hello,
 
 # Configures the endpoint
 config :hello, HelloWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "0.0.0.0"],
   secret_key_base: "mDADt3vQr2jOHhkhxt+w5e3jfoBTiYtuBX4rl7y4C5wHJhZPM99E5LwOox3t0h4d",
   render_errors: [view: HelloWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Hello.PubSub,

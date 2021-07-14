@@ -1,0 +1,30 @@
+- name: Add Erlang signing key
+  apt_key:
+    url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
+    state: present
+
+- name: Add Erlang deb repository
+  apt_repository:
+    repo: deb https://packages.erlang-solutions.com/ubuntu focal contrib
+    filename: erlangsource
+    update_cache: true
+
+- name: Install Erlang
+  apt:
+    name: erlang
+    state: present
+
+- name: Install Elixir
+  apt:
+    name: elixir
+    state: present
+
+- name: Install Rebar
+  become: true
+  command: mix local.rebar --if-missing --force
+
+- name: Install Hex
+  command: mix local.hex --force
+
+- name: Install Phoenix
+  command: mix archive.install hex phx_new --force

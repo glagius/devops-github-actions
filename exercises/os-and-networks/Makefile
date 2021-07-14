@@ -11,5 +11,5 @@ setup-deps:
 install:
 	vagrant ssh -c "cd /vagrant/hello && mix deps.get --force"
 
-start:
+start: setup-deps install
 	vagrant ssh -c "cd /vagrant/hello && mix phx.server"
