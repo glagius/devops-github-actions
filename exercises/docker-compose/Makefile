@@ -1,6 +1,7 @@
 # @TODO add tests with docker-compose
 test:
-	test -f Dockerfile
+	test -f Dockerfile.api
+	test -f Dockerfile.frontend
 	test -f docker-compose.yml
 
 compose-install:
