@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+  # TODO: Доработать когда буду разбираться в создании приложения на NestJS.
+  #  postgres:
+  #   container_name: postgres
+  #   image: postgres:13
+  #   ports:
+  #   - "5432:5432"
+  #   volumes:
+  #   - /database:/database
+  #   env_file:
+  #   - .env
+
+  api:
+    image: glagius/nest-api
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "3000:3000"
+    env_file: '.env'
+    volumes:
+      - "./api:/api"
+    command: ["npm", "run", "start:dev"]
+    # depends_on:
+    #   - db
+
+  frontend:
+    image: glagius/angular-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "4200:4200"
+    env_file: '.env'
+    volumes:
+      - "./workspace:/frontend"
+    command: ["ng", "serve", "--host", "0.0.0.0"]
+
+    # TODO: Добавить прокси с использованием nginx

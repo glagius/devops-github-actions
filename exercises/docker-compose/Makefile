@@ -4,8 +4,8 @@ test:
 	test -f docker-compose.yml
 
 compose-install:
-	docker-compose run application make install
-	docker-compose run frontend npm ci
+	docker-compose run api npm install
+	docker-compose run frontend npm install
 
 compose-start:
 	docker-compose up --abort-on-container-exit
@@ -24,5 +24,8 @@ compose-stop:
 compose-restart:
 	docker-compose restart
 
-compose-bash:
-	docker-compose application run bash
+compose-bash-api:
+	docker-compose run api bash
+
+compose-bash-frontend:
+	docker-compose run frontend bash
